@@ -257,10 +257,10 @@ VALUES
 -- Insert Subscriptions (§ 04)
 INSERT INTO public.subscriptions (id, user_id, plan, status, amount, billing_cycle, current_period_start, current_period_end, renewal_date)
 VALUES
-('s1111111-1111-1111-1111-111111111111', 'a1111111-aaaa-1111-aaaa-111111111111', 'yearly', 'active', 180.00, 'yearly', NOW() - INTERVAL '60 days', NOW() + INTERVAL '305 days', NOW() + INTERVAL '305 days'),
-('s2222222-2222-2222-2222-222222222222', 'b2222222-bbbb-2222-bbbb-222222222222', 'monthly', 'active', 19.99, 'monthly', NOW() - INTERVAL '12 days', NOW() + INTERVAL '18 days', NOW() + INTERVAL '18 days'),
-('s3333333-3333-3333-3333-333333333333', 'b3333333-cccc-3333-cccc-333333333333', 'yearly', 'active', 180.00, 'yearly', NOW() - INTERVAL '30 days', NOW() + INTERVAL '335 days', NOW() + INTERVAL '335 days'),
-('s4444444-4444-4444-4444-444444444444', 'b4444444-dddd-4444-dddd-444444444444', 'monthly', 'active', 19.99, 'monthly', NOW() - INTERVAL '5 days', NOW() + INTERVAL '25 days', NOW() + INTERVAL '25 days');
+('fa111111-1111-1111-1111-111111111111', 'a1111111-aaaa-1111-aaaa-111111111111', 'yearly', 'active', 180.00, 'yearly', NOW() - INTERVAL '60 days', NOW() + INTERVAL '305 days', NOW() + INTERVAL '305 days'),
+('fa222222-2222-2222-2222-222222222222', 'b2222222-bbbb-2222-bbbb-222222222222', 'monthly', 'active', 19.99, 'monthly', NOW() - INTERVAL '12 days', NOW() + INTERVAL '18 days', NOW() + INTERVAL '18 days'),
+('fa333333-3333-3333-3333-333333333333', 'b3333333-cccc-3333-cccc-333333333333', 'yearly', 'active', 180.00, 'yearly', NOW() - INTERVAL '30 days', NOW() + INTERVAL '335 days', NOW() + INTERVAL '335 days'),
+('fa444444-4444-4444-4444-444444444444', 'b4444444-dddd-4444-dddd-444444444444', 'monthly', 'active', 19.99, 'monthly', NOW() - INTERVAL '5 days', NOW() + INTERVAL '25 days', NOW() + INTERVAL '25 days');
 
 -- Insert 5 Stableford Scores for Abhayraj Singh (§ 05: strictly 1-45, 1 per date, reverse chronological)
 INSERT INTO public.scores (user_id, score, score_date, course_name)
@@ -362,7 +362,7 @@ VALUES
 INSERT INTO public.winner_verifications (id, entry_id, user_id, draw_id, proof_url, status, admin_notes, payment_status, submitted_at, reviewed_at, payout_date)
 VALUES
 (
-    'v1111111-1111-1111-1111-111111111111',
+    'ea111111-1111-1111-1111-111111111111',
     'e1111111-1111-1111-1111-111111111111',
     'b2222222-bbbb-2222-bbbb-222222222222',
     'd1111111-1111-1111-1111-111111111111',
