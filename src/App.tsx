@@ -10,6 +10,7 @@ import { AdminDashboardView } from './components/AdminDashboardView';
 import { SubscribeModal } from './components/SubscribeModal';
 import { SystemDesignModal } from './components/SystemDesignModal';
 import { EvaluatorTour } from './components/EvaluatorTour';
+import { InteractiveBackdrop } from './components/InteractiveBackdrop';
 import { Footer } from './components/Footer';
 import { SubscriptionPlan } from './types';
 
@@ -26,8 +27,11 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
-      <div>
+    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950 relative">
+      {/* Interactive Global Cursor Spotlight & Animated Ambient Backdrop */}
+      <InteractiveBackdrop />
+
+      <div className="relative z-10">
         {/* Navigation & Role Controls */}
         <Navbar
           activeTab={activeTab}

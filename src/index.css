@@ -30,46 +30,149 @@
   background: #334155;
 }
 
-/* Glassmorphism utility */
+/* Glassmorphism & Neo-Editorial Utilities */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(13, 20, 36, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+}
+
+.glass-panel-opaque {
+  background: #0b1120;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.95);
 }
 
 .glass-panel-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-panel-hover:hover {
-  background: rgba(30, 41, 59, 0.8);
-  border-color: rgba(255, 255, 255, 0.16);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+  background: rgba(22, 33, 58, 0.9);
+  border-color: rgba(52, 211, 153, 0.4);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.15), 0 0 20px rgba(16, 185, 129, 0.1);
 }
 
-/* Pulsing glow animation */
-@keyframes glow-pulse {
+/* Background Cyber Grid */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+.bg-radial-mask {
+  mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+}
+
+/* Keyframe Animations */
+@keyframes float-slow {
   0%, 100% {
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    transform: translateY(0px) rotate(0deg);
   }
   50% {
-    box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+    transform: translateY(-12px) rotate(1deg);
   }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(12px) rotate(-1deg);
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(16, 185, 129, 0.55);
+  }
+}
+
+@keyframes laser-sweep {
+  0% {
+    top: 0%;
+    opacity: 0.8;
+  }
+  50% {
+    top: 95%;
+    opacity: 1;
+  }
+  100% {
+    top: 0%;
+    opacity: 0.8;
+  }
+}
+
+.animate-float {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 7s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  animation: shimmer-sweep 3s infinite;
+}
+
+.animate-laser {
+  animation: laser-sweep 2.5s ease-in-out infinite;
 }
 
 .glow-emerald {
   animation: glow-pulse 3s infinite ease-in-out;
 }
 
-/* Stableford Ball Styling */
+.text-glow-emerald {
+  text-shadow: 0 0 25px rgba(52, 211, 153, 0.6);
+}
+
+.text-glow-amber {
+  text-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
+}
+
+/* 3D Realistic Stableford Balls */
 .golf-ball {
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #cbd5e1 60%, #94a3b8 100%);
-  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.6), inset -2px -2px 6px rgba(0, 0, 0, 0.3), inset 2px 2px 6px rgba(255, 255, 255, 0.8);
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #e2e8f0 45%, #94a3b8 80%, #64748b 100%);
+  box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.7), inset -3px -3px 8px rgba(0, 0, 0, 0.4), inset 3px 3px 8px rgba(255, 255, 255, 0.9);
+}
+
+.golf-ball-active {
+  background: radial-gradient(circle at 35% 30%, #dcfce7 0%, #86efac 45%, #10b981 80%, #065f46 100%);
+  box-shadow: 0 10px 25px -3px rgba(16, 185, 129, 0.6), 0 0 20px rgba(52, 211, 153, 0.4), inset -3px -3px 8px rgba(0, 0, 0, 0.4), inset 3px 3px 8px rgba(255, 255, 255, 0.9);
 }
 
 .gold-ball {
-  background: radial-gradient(circle at 30% 30%, #fef08a 0%, #eab308 60%, #a16207 100%);
-  box-shadow: 0 8px 20px -4px rgba(234, 179, 8, 0.5), inset -2px -2px 6px rgba(0, 0, 0, 0.4), inset 2px 2px 6px rgba(255, 255, 255, 0.9);
+  background: radial-gradient(circle at 35% 30%, #fef9c3 0%, #facc15 45%, #ca8a04 80%, #713f12 100%);
+  box-shadow: 0 10px 25px -3px rgba(234, 179, 8, 0.6), 0 0 25px rgba(250, 204, 21, 0.4), inset -3px -3px 8px rgba(0, 0, 0, 0.5), inset 3px 3px 8px rgba(255, 255, 255, 0.95);
 }

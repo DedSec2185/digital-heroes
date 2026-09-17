@@ -92,59 +92,59 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
   const totalWon = userVerifications.reduce((sum, v) => sum + v.prizeAmount, 0);
 
   return (
-    <div className="py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
       {/* Top Banner / User Welcome (§ 10) */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
+      <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-white/15 bg-gradient-to-r from-slate-950 via-[#0c1424] to-slate-950 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 shadow-2xl">
+        <div className="flex items-center gap-5">
           <img
             src={currentUser.avatarUrl}
             alt={currentUser.fullName}
-            className="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-400/40 shadow-lg"
+            className="w-20 h-20 rounded-2xl object-cover border-2 border-emerald-400 shadow-xl shadow-emerald-950/50"
           />
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-white">{currentUser.fullName}</h1>
-              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+            <div className="flex items-center gap-3">
+              <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">{currentUser.fullName}</h1>
+              <span className="text-xs uppercase font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                 Verified Subscriber
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-1 flex items-center gap-3">
-              <span>Home Club: <strong className="text-slate-200">{currentUser.homeClub}</strong></span>
-              <span>•</span>
-              <span>Handicap Index: <strong className="text-slate-200">{currentUser.handicap}</strong></span>
+            <p className="text-sm sm:text-base text-slate-300 mt-2 flex flex-wrap items-center gap-3">
+              <span>Home Club: <strong className="text-white font-semibold">{currentUser.homeClub}</strong></span>
+              <span className="text-slate-500">•</span>
+              <span>Handicap Index: <strong className="text-emerald-400 font-mono font-bold">{currentUser.handicap}</strong></span>
             </p>
           </div>
         </div>
 
         {/* 1. Subscription Status Module (§ 04, § 10) */}
-        <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/10 w-full md:w-auto justify-between md:justify-start">
+        <div className="flex items-center gap-6 p-5 rounded-2xl bg-black/60 border border-white/15 w-full md:w-auto justify-between md:justify-start shadow-inner">
           <div>
-            <span className="text-[10px] text-slate-400 block uppercase font-medium">Subscription Status</span>
-            <div className="flex items-center gap-2 mt-0.5">
-              <span className={`w-2.5 h-2.5 rounded-full ${
+            <span className="text-xs text-slate-400 block uppercase tracking-wider font-bold">Subscription Status</span>
+            <div className="flex items-center gap-2.5 mt-1">
+              <span className={`w-3 h-3 rounded-full ${
                 subscription?.status === 'active' ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
               }`} />
-              <span className="text-sm font-bold text-white capitalize">
+              <span className="text-base sm:text-lg font-black text-white capitalize">
                 {subscription?.status || 'Inactive'} ({subscription?.plan || 'No plan'})
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-0.5">
-              Renewal Date: <span className="text-slate-200 font-mono">{subscription?.renewalDate || 'N/A'}</span>
+            <p className="text-xs text-slate-300 mt-1">
+              Renewal Date: <span className="text-white font-mono font-semibold">{subscription?.renewalDate || 'N/A'}</span>
             </p>
           </div>
 
-          <div className="border-l border-white/10 pl-4">
+          <div className="border-l border-white/15 pl-5">
             {subscription?.status === 'active' ? (
               <button
                 onClick={cancelSubscription}
-                className="text-[11px] text-rose-400 hover:text-rose-300 underline font-medium"
+                className="text-xs text-rose-400 hover:text-rose-300 underline font-semibold transition-colors"
               >
                 Pause / Cancel
               </button>
             ) : (
               <button
                 onClick={renewSubscription}
-                className="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-bold text-xs"
+                className="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs hover:bg-emerald-400 shadow-md"
               >
                 Reactivate
               </button>
@@ -157,50 +157,52 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* 2. Score Management System (§ 05, § 10) - 2 Columns wide */}
-        <div className="lg:col-span-2 glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <div className="lg:col-span-2 glass-panel p-8 sm:p-10 rounded-3xl border border-white/15 space-y-8 shadow-2xl">
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/15">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-emerald-400 uppercase">§ 05 Engine</span>
-                <span className="text-[10px] text-slate-400 font-mono">5-Score Rolling Buffer</span>
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs font-mono font-bold text-emerald-400 uppercase bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                  § 05 Engine
+                </span>
+                <span className="text-xs text-slate-300 font-mono">5-Score Rolling FIFO Buffer</span>
               </div>
-              <h2 className="text-xl font-bold text-white mt-1">Your 5 Active Stableford Scores</h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <h2 className="text-2xl sm:text-3xl font-black text-white mt-2">Your 5 Active Stableford Scores</h2>
+              <p className="text-sm text-slate-300 mt-1">
                 These exact 5 numbers represent your active ticket in the upcoming cash draw.
               </p>
             </div>
 
             <button
               onClick={handleOpenAddScore}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:brightness-110 text-slate-950 font-bold text-xs shadow-md shadow-emerald-500/20 flex items-center gap-1.5 transition-all"
+              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 hover:brightness-110 text-slate-950 font-black text-sm sm:text-base shadow-xl shadow-emerald-500/30 flex items-center gap-2 transition-all hover:scale-105 active:scale-95"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-5 h-5" />
               <span>Log New Round</span>
             </button>
           </div>
 
           {/* Performance Analytics Telemetry Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-black/40 border border-white/5 text-center">
-            <div>
-              <span className="text-[10px] text-slate-400 block uppercase">Average Points</span>
-              <span className="text-base font-bold font-mono text-emerald-400">{avgScore}</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-2xl bg-black/60 border border-white/10 text-center shadow-inner">
+            <div className="p-2">
+              <span className="text-xs text-slate-400 block uppercase font-semibold">Average Points</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-emerald-400 mt-1 block">{avgScore}</span>
             </div>
-            <div>
-              <span className="text-[10px] text-slate-400 block uppercase">Best Round</span>
-              <span className="text-base font-bold font-mono text-amber-400">{bestScore} pts</span>
+            <div className="p-2">
+              <span className="text-xs text-slate-400 block uppercase font-semibold">Best Round</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-amber-400 mt-1 block">{bestScore} pts</span>
             </div>
-            <div>
-              <span className="text-[10px] text-slate-400 block uppercase">Low Round</span>
-              <span className="text-base font-bold font-mono text-slate-300">{lowestScore} pts</span>
+            <div className="p-2">
+              <span className="text-xs text-slate-400 block uppercase font-semibold">Low Round</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-slate-200 mt-1 block">{lowestScore} pts</span>
             </div>
-            <div>
-              <span className="text-[10px] text-slate-400 block uppercase">Rolling Buffer</span>
-              <span className="text-base font-bold font-mono text-teal-400">{userScores.length}/5 Active</span>
+            <div className="p-2">
+              <span className="text-xs text-slate-400 block uppercase font-semibold">Rolling Buffer</span>
+              <span className="text-xl sm:text-2xl font-black font-mono text-teal-400 mt-1 block">{userScores.length}/5 Active</span>
             </div>
           </div>
 
           {/* 5-Score Rolling Slot Cards View */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
             {[0, 1, 2, 3, 4].map((slotIdx) => {
               const scoreEntry = userScores[slotIdx];
 
@@ -208,42 +210,42 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
                 return (
                   <div
                     key={scoreEntry.id}
-                    className="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/30 shadow-md relative group hover:border-emerald-400 transition-all flex flex-col justify-between"
+                    className="p-5 rounded-2xl bg-slate-900/95 border-2 border-emerald-500/40 shadow-xl relative group hover:border-emerald-300 transition-all flex flex-col justify-between hover:-translate-y-1"
                   >
                     <div>
-                      <div className="flex items-center justify-between text-[10px] text-slate-400 mb-2">
-                        <span className="font-mono">Round #{slotIdx + 1}</span>
+                      <div className="flex items-center justify-between text-xs text-slate-400 mb-3">
+                        <span className="font-mono font-bold text-emerald-400">Slot #{slotIdx + 1}</span>
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => handleOpenEditScore(scoreEntry)}
-                            className="p-1 hover:text-emerald-300 text-slate-400"
+                            className="p-1.5 hover:text-emerald-300 text-slate-300 bg-black/40 rounded"
                             title="Edit this score"
                           >
-                            <Edit3 className="w-3 h-3" />
+                            <Edit3 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => deleteScore(scoreEntry.id)}
-                            className="p-1 hover:text-rose-400 text-slate-400"
+                            className="p-1.5 hover:text-rose-400 text-slate-300 bg-black/40 rounded"
                             title="Delete this score"
                           >
-                            <Trash2 className="w-3 h-3" />
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </div>
 
-                      {/* Golf Ball Visual Element */}
-                      <div className="w-14 h-14 rounded-full golf-ball mx-auto flex items-center justify-center my-2">
-                        <span className="text-xl font-black font-mono text-slate-900 drop-shadow-sm">
+                      {/* Large 3D Golf Ball Visual Element */}
+                      <div className="w-16 h-16 rounded-full golf-ball-active mx-auto flex items-center justify-center my-3 shadow-xl">
+                        <span className="text-2xl font-black font-mono text-slate-950">
                           {scoreEntry.score}
                         </span>
                       </div>
                     </div>
 
-                    <div className="text-center pt-2 border-t border-white/5">
-                      <span className="text-[11px] font-semibold text-slate-200 block truncate" title={scoreEntry.courseName}>
+                    <div className="text-center pt-3 border-t border-white/10">
+                      <span className="text-xs font-bold text-white block truncate" title={scoreEntry.courseName}>
                         {scoreEntry.courseName}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono block">
+                      <span className="text-[11px] text-slate-400 font-mono block mt-0.5">
                         {scoreEntry.date}
                       </span>
                     </div>
@@ -256,23 +258,23 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
                 <div
                   key={slotIdx}
                   onClick={handleOpenAddScore}
-                  className="p-4 rounded-2xl border-2 border-dashed border-white/10 hover:border-emerald-500/40 cursor-pointer transition-all flex flex-col items-center justify-center text-center group min-h-[140px]"
+                  className="p-5 rounded-2xl border-2 border-dashed border-white/15 hover:border-emerald-500/50 cursor-pointer transition-all flex flex-col items-center justify-center text-center group min-h-[160px] bg-white/[0.02] hover:bg-white/[0.05]"
                 >
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-500 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 mb-2 transition-all">
-                    <Plus className="w-4 h-4" />
+                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-slate-400 group-hover:text-emerald-400 group-hover:bg-emerald-500/20 mb-2 transition-all">
+                    <Plus className="w-5 h-5" />
                   </div>
-                  <span className="text-xs text-slate-400 font-medium">Slot #{slotIdx + 1}</span>
-                  <span className="text-[10px] text-slate-500">Empty</span>
+                  <span className="text-xs text-slate-300 font-bold">Slot #{slotIdx + 1}</span>
+                  <span className="text-[11px] text-slate-500 font-mono">Empty Round</span>
                 </div>
               );
             })}
           </div>
 
           {/* Rolling Replacement Notice */}
-          <div className="p-3.5 rounded-xl bg-slate-950/60 border border-white/5 flex items-center gap-3 text-xs text-slate-400">
-            <Info className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+          <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/10 flex items-center gap-3.5 text-xs sm:text-sm text-slate-300">
+            <Info className="w-5 h-5 text-emerald-400 shrink-0" />
             <span>
-              <strong>FIFO Rolling Engine:</strong> Only your latest 5 rounds are kept. When you add a new round, the oldest recorded score ({userScores[userScores.length - 1]?.date || 'None'}) will be automatically archived.
+              <strong className="text-white">FIFO Rolling Engine:</strong> Only your latest 5 rounds are kept. When you add a new round, the oldest recorded score ({userScores[userScores.length - 1]?.date || 'None'}) will be automatically archived.
             </span>
           </div>
 
@@ -314,50 +316,52 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
         </div>
 
         {/* 3. Charity & Giving Settings Card (§ 08, § 10) */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6 flex flex-col justify-between">
+        <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-white/15 space-y-8 flex flex-col justify-between shadow-2xl">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-mono font-bold text-emerald-400 uppercase">§ 08 Impact</span>
+              <span className="text-xs font-mono font-bold text-emerald-400 uppercase bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                § 08 Impact
+              </span>
               <button
                 onClick={onExploreCharities}
-                className="text-[11px] text-slate-400 hover:text-white flex items-center gap-1"
+                className="text-xs text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 transition-all"
               >
                 <span>Change Charity</span>
-                <ChevronRight className="w-3 h-3" />
+                <ChevronRight className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            <h2 className="text-xl font-bold text-white">Selected Charity Recipient</h2>
+            <h2 className="text-2xl font-black text-white">Selected Charity Recipient</h2>
 
             {selectedCharity ? (
-              <div className="mt-4 p-4 rounded-2xl bg-slate-950/80 border border-emerald-500/20">
-                <div className="flex items-center gap-3">
+              <div className="mt-5 p-5 rounded-2xl bg-slate-950/90 border-2 border-emerald-500/30 shadow-lg">
+                <div className="flex items-center gap-4">
                   <img
                     src={selectedCharity.logoUrl}
                     alt={selectedCharity.name}
-                    className="w-12 h-12 rounded-xl object-cover border border-white/10"
+                    className="w-14 h-14 rounded-2xl object-cover border border-white/15 shadow-md"
                   />
                   <div>
-                    <h4 className="text-sm font-bold text-white">{selectedCharity.name}</h4>
-                    <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
+                    <h4 className="text-base font-black text-white">{selectedCharity.name}</h4>
+                    <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider">
                       {selectedCharity.category}
                     </span>
                   </div>
                 </div>
-                <p className="mt-3 text-xs text-slate-400 line-clamp-2">
+                <p className="mt-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
                   {selectedCharity.tagline}
                 </p>
-                <div className="mt-3 pt-3 border-t border-white/5 flex justify-between items-center text-xs">
-                  <span className="text-slate-400">Total Raised:</span>
-                  <span className="font-mono text-emerald-400 font-bold">${selectedCharity.totalRaised.toLocaleString()}</span>
+                <div className="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-xs sm:text-sm">
+                  <span className="text-slate-400">Total Raised to Date:</span>
+                  <span className="font-mono text-emerald-400 font-black text-base">${selectedCharity.totalRaised.toLocaleString()}</span>
                 </div>
               </div>
             ) : (
-              <div className="p-4 rounded-2xl bg-slate-950/50 border border-dashed border-white/10 text-center my-4">
-                <p className="text-xs text-slate-400">No charity selected yet.</p>
+              <div className="p-6 rounded-2xl bg-slate-950/60 border border-dashed border-white/15 text-center my-4">
+                <p className="text-sm text-slate-300">No charity selected yet.</p>
                 <button
                   onClick={onExploreCharities}
-                  className="mt-2 text-xs text-emerald-400 underline font-semibold"
+                  className="mt-3 text-xs text-emerald-400 underline font-bold"
                 >
                   Pick A Cause From Directory
                 </button>
@@ -365,12 +369,12 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
             )}
 
             {/* Interactive Voluntary Contribution Percentage Slider (§ 08.1) */}
-            <div className="mt-6 pt-6 border-t border-white/10">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-semibold text-slate-300 uppercase">
+            <div className="mt-8 pt-6 border-t border-white/15">
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-xs sm:text-sm font-bold text-slate-200 uppercase tracking-wider">
                   Voluntary Contribution %
                 </label>
-                <span className="text-sm font-bold font-mono text-emerald-400">
+                <span className="text-lg font-black font-mono text-emerald-400 bg-emerald-950/80 px-3 py-1 rounded-xl border border-emerald-500/40">
                   {sliderPercentage}%
                 </span>
               </div>
@@ -382,41 +386,41 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
                 step="5"
                 value={sliderPercentage}
                 onChange={(e) => setSliderPercentage(parseInt(e.target.value))}
-                className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                className="w-full h-3 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
               />
 
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
-                <span>10% (Min Required)</span>
+              <div className="flex justify-between text-xs text-slate-400 font-mono mt-2 font-medium">
+                <span>10% (Mandatory Floor)</span>
                 <span>50%</span>
                 <span>100%</span>
               </div>
 
-              <div className="mt-4 p-3 rounded-xl bg-black/40 border border-white/5 text-[11px] text-slate-400 space-y-1">
+              <div className="mt-5 p-4 rounded-2xl bg-black/60 border border-white/10 text-xs sm:text-sm text-slate-300 space-y-2">
                 <div className="flex justify-between">
-                  <span>Monthly Contribution:</span>
-                  <span className="text-white font-mono font-semibold">
+                  <span>Monthly Charity Grant:</span>
+                  <span className="text-emerald-400 font-mono font-bold">
                     ${((19.99 * sliderPercentage) / 100).toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Prize Pool Contribution:</span>
-                  <span className="text-amber-400 font-mono font-semibold">$10.00 (50%)</span>
+                  <span>Prize Pool Allocation:</span>
+                  <span className="text-amber-400 font-mono font-bold">$10.00 (50.0%)</span>
                 </div>
               </div>
 
               {/* Real-World Tangible Impact Card (§ 08) */}
               {tangibleImpact && (
-                <div className="mt-3 p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 text-xs animate-in fade-in duration-300">
-                  <div className="flex items-center gap-1.5 text-emerald-300 font-bold uppercase tracking-wider text-[10px] mb-1">
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> Tangible Humanitarian Outcome
+                <div className="mt-4 p-4 rounded-2xl bg-emerald-950/60 border-2 border-emerald-500/40 text-xs sm:text-sm animate-in fade-in duration-300 shadow-xl">
+                  <div className="flex items-center gap-2 text-emerald-300 font-bold uppercase tracking-wider text-xs mb-1.5">
+                    <Sparkles className="w-4 h-4 text-emerald-400" /> Tangible Humanitarian Outcome
                   </div>
-                  <div className="text-white font-semibold">
+                  <div className="text-white font-black text-sm sm:text-base">
                     {tangibleImpact.metricNumber} {tangibleImpact.metricUnit}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">
+                  <div className="text-xs text-slate-300 mt-1">
                     {tangibleImpact.secondaryOutcome}
                   </div>
-                  <div className="text-[10px] text-emerald-400/80 font-mono mt-1 pt-1 border-t border-emerald-500/20">
+                  <div className="text-xs text-emerald-300 font-mono mt-2 pt-2 border-t border-emerald-500/20 font-semibold">
                     {tangibleImpact.equivalentRounds}
                   </div>
                 </div>
@@ -425,7 +429,7 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
               {sliderPercentage !== currentUser.charityPercentage && (
                 <button
                   onClick={handleCommitSliderPercentage}
-                  className="w-full mt-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all"
+                  className="w-full mt-5 py-3.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition-all shadow-xl shadow-emerald-500/20 hover:scale-[1.02]"
                 >
                   Save Contribution Percentage
                 </button>
@@ -439,37 +443,41 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
         {/* 4. Draw Participation Summary (§ 10) */}
-        <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+        <div className="glass-panel p-8 sm:p-10 rounded-3xl border border-white/15 space-y-6 shadow-2xl">
+          <div className="flex items-center justify-between pb-4 border-b border-white/15">
             <div>
-              <span className="text-xs font-mono font-bold text-amber-400 uppercase">§ 06 & § 07 Ticket</span>
-              <h3 className="text-lg font-bold text-white mt-0.5">Upcoming Draw Ticket</h3>
+              <span className="text-xs font-mono font-bold text-amber-400 uppercase bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">
+                § 06 & § 07 Ticket
+              </span>
+              <h3 className="text-xl font-black text-white mt-1">Upcoming Draw Ticket</h3>
             </div>
-            <div className="px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-mono font-bold">
+            <div className="px-3.5 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 text-xs font-mono font-bold">
               {activeDraw ? `Draw #${activeDraw.drawNumber}` : 'Next Month'}
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-amber-500/20">
-            <div className="flex justify-between items-center mb-3">
-              <span className="text-xs text-slate-400 uppercase font-semibold">Your 5 Active Draw Numbers</span>
-              <span className="text-xs text-emerald-400 font-mono font-bold">Ticket Confirmed</span>
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-950 via-[#0e172a] to-slate-950 border-2 border-amber-500/30 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-xs sm:text-sm text-slate-300 uppercase font-bold tracking-wider">Your 5 Active Draw Numbers</span>
+              <span className="text-xs text-emerald-400 font-mono font-bold bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-500/40">
+                ✓ Confirmed Ticket
+              </span>
             </div>
 
-            <div className="flex items-center gap-3 my-2">
+            <div className="flex flex-wrap items-center gap-3.5 my-3">
               {userScores.slice(0, 5).map((s, idx) => (
                 <div
                   key={idx}
-                  className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center font-mono font-bold text-white text-base shadow-sm"
+                  className="w-14 h-14 rounded-2xl gold-ball flex items-center justify-center font-mono font-black text-slate-950 text-xl shadow-lg"
                 >
                   {s.score}
                 </div>
               ))}
             </div>
 
-            <div className="mt-4 pt-3 border-t border-white/5 flex flex-wrap justify-between items-center gap-2 text-xs text-slate-400">
+            <div className="mt-5 pt-4 border-t border-white/10 flex flex-wrap justify-between items-center gap-2 text-xs sm:text-sm text-slate-300">
               <span>Next Draw Scheduled:</span>
-              <span className="font-mono text-white font-semibold">
+              <span className="font-mono text-white font-bold">
                 {activeDraw ? new Date(activeDraw.drawDate).toLocaleDateString() : 'End of Month'}
               </span>
             </div>
