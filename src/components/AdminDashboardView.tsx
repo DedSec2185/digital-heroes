@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Charity, DrawLogicType, DrawSimulation, GolfScore, WinnerVerification } from '../types';
 import { DrawEngine } from '../lib/drawEngine';
+import { MonteCarloModal } from './MonteCarloModal';
+import { ScorecardScannerModal } from './ScorecardScannerModal';
+import { sounds } from '../lib/audioEffects';
 import { 
   Users, 
   Trophy, 
@@ -19,7 +22,9 @@ import {
   Sparkles, 
   AlertTriangle,
   Play,
-  ArrowRight
+  ArrowRight,
+  Activity,
+  Scan
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -61,12 +66,16 @@ export const AdminDashboardView: React.FC = () => {
 
   // Selected Proof for modal inspection (§ 11.4)
   const [inspectingVerification, setInspectingVerification] = useState<WinnerVerification | null>(null);
+  const [scannerVerification, setScannerVerification] = useState<WinnerVerification | null>(null);
+  const [isMonteCarloOpen, setIsMonteCarloOpen] = useState<boolean>(false);
   const [adminNote, setAdminNote] = useState('');
 
   // 1. Run Simulation Handler
   const handleRunSimulation = () => {
+    sounds.playBallTumble();
     const sim = runDrawSimulation(selectedLogic);
     setActiveSimulation(sim);
+    sounds.playBallReveal(3);
   };
 
   // 2. Publish Official Draw Handler
@@ -202,29 +211,43 @@ export const AdminDashboardView: React.FC = () => {
                 </p>
               </div>
 
-              {/* Logic Selector (§ 06: Random vs. Algorithmic) */}
-              <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-900 border border-white/10">
-                <span className="text-[11px] text-slate-400 px-2 font-medium">Draw Engine:</span>
+              <div className="flex flex-wrap items-center gap-2.5">
+                {/* 1,000-Draw Monte Carlo Stress Test (§ 11.2, § 11.5) */}
                 <button
-                  onClick={() => setSelectedLogic('random')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                    selectedLogic === 'random'
-                      ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
+                  onClick={() => {
+                    sounds.playClick();
+                    setIsMonteCarloOpen(true);
+                  }}
+                  className="px-3.5 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"
                 >
-                  Standard Random
+                  <Activity className="w-3.5 h-3.5 text-amber-400" />
+                  <span>1,000-Draw Monte Carlo</span>
                 </button>
-                <button
-                  onClick={() => setSelectedLogic('algorithmic')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                    selectedLogic === 'algorithmic'
-                      ? 'bg-emerald-500 text-slate-950 font-bold shadow-sm'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  Algorithmic Frequency
-                </button>
+
+                {/* Logic Selector (§ 06: Random vs. Algorithmic) */}
+                <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-900 border border-white/10">
+                  <span className="text-[11px] text-slate-400 px-2 font-medium">Draw Engine:</span>
+                  <button
+                    onClick={() => setSelectedLogic('random')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                      selectedLogic === 'random'
+                        ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Standard Random
+                  </button>
+                  <button
+                    onClick={() => setSelectedLogic('algorithmic')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                      selectedLogic === 'algorithmic'
+                        ? 'bg-emerald-500 text-slate-950 font-bold shadow-sm'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Algorithmic Frequency
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -466,13 +489,25 @@ export const AdminDashboardView: React.FC = () => {
 
                 <div className="flex flex-wrap items-center gap-3">
                   {v.proofUrl ? (
-                    <button
-                      onClick={() => setInspectingVerification(v)}
-                      className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Inspect Proof</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          sounds.playClick();
+                          setScannerVerification(v);
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                      >
+                        <Scan className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>AI Vision OCR</span>
+                      </button>
+                      <button
+                        onClick={() => setInspectingVerification(v)}
+                        className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Inspect Image</span>
+                      </button>
+                    </div>
                   ) : (
                     <span className="text-slate-500 italic text-xs">No Proof Uploaded</span>
                   )}
@@ -709,6 +744,21 @@ export const AdminDashboardView: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 1,000-Draw Monte Carlo Stress Test Modal (§ 11.2, § 11.5) */}
+      <MonteCarloModal
+        isOpen={isMonteCarloOpen}
+        onClose={() => setIsMonteCarloOpen(false)}
+      />
+
+      {/* AI Scorecard Vision Scanner Modal (§ 09, § 11.4) */}
+      {scannerVerification && (
+        <ScorecardScannerModal
+          isOpen={Boolean(scannerVerification)}
+          onClose={() => setScannerVerification(null)}
+          verification={scannerVerification}
+        />
       )}
     </div>
   );

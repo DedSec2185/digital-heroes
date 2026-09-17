@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { UserRole } from '../types';
+import { sounds } from '../lib/audioEffects';
 import { 
   Trophy, 
   Heart, 
@@ -9,21 +10,35 @@ import {
   Sparkles, 
   UserCheck, 
   Globe, 
-  Zap 
+  Zap,
+  Layers,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 
 interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   openSubscribeModal: () => void;
+  openSystemDesignModal?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
   activeTab, 
   setActiveTab, 
-  openSubscribeModal 
+  openSubscribeModal,
+  openSystemDesignModal
 }) => {
   const { currentRole, setCurrentRole, subscription, resetState, currentUser } = useApp();
+  const [isMuted, setIsMuted] = useState<boolean>(sounds.getMuted());
+
+  const handleToggleMute = () => {
+    const next = sounds.toggleMute();
+    setIsMuted(next);
+    if (!next) {
+      sounds.playClick();
+    }
+  };
 
   const handleRoleChange = (role: UserRole) => {
     setCurrentRole(role);
@@ -82,18 +97,48 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          <button
-            onClick={() => {
-              if (confirm('Reset platform data to clean seed state?')) {
-                resetState();
-              }
-            }}
-            title="Reset to original PRD seed data"
-            className="text-slate-400 hover:text-amber-300 transition-colors flex items-center gap-1 text-[11px]"
-          >
-            <RotateCcw className="w-3 h-3" />
-            <span>Reset Demo</span>
-          </button>
+          {/* Action Utilities: System Design, Audio & Reset */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => openSystemDesignModal?.()}
+              title="System Design, Architecture & PostgreSQL Schema"
+              className="text-emerald-400 hover:text-emerald-300 bg-emerald-950/50 hover:bg-emerald-900/50 border border-emerald-500/30 px-2.5 py-1 rounded-md transition-all flex items-center gap-1.5 text-[11px] font-semibold shadow-sm"
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">System Architecture</span>
+            </button>
+
+            <button
+              onClick={handleToggleMute}
+              title={isMuted ? "Unmute Procedural Audio" : "Mute Audio"}
+              className="text-slate-400 hover:text-white bg-black/40 hover:bg-slate-800 border border-white/10 px-2 py-1 rounded-md transition-all flex items-center gap-1 text-[11px]"
+            >
+              {isMuted ? (
+                <>
+                  <VolumeX className="w-3.5 h-3.5 text-rose-400" />
+                  <span className="hidden md:inline">Muted</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="hidden md:inline">Audio</span>
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={() => {
+                if (confirm('Reset platform data to clean seed state?')) {
+                  resetState();
+                }
+              }}
+              title="Reset to original PRD seed data"
+              className="text-slate-400 hover:text-amber-300 transition-colors flex items-center gap-1 text-[11px] ml-1"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span className="hidden sm:inline">Reset</span>
+            </button>
+          </div>
         </div>
       </div>
 

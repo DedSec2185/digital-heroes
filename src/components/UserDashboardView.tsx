@@ -3,6 +3,9 @@ import { useApp } from '../context/AppContext';
 import { GolfScore, WinnerVerification } from '../types';
 import { ScoreEntryModal } from './ScoreEntryModal';
 import { WinnerProofUploadModal } from './WinnerProofUploadModal';
+import { ScorecardScannerModal } from './ScorecardScannerModal';
+import { ImpactCalculator } from '../lib/impactCalculator';
+import { sounds } from '../lib/audioEffects';
 import { 
   Sparkles, 
   Calendar, 
@@ -18,7 +21,8 @@ import {
   ExternalLink,
   ChevronRight,
   TrendingUp,
-  Info
+  Info,
+  Scan
 } from 'lucide-react';
 
 interface UserDashboardViewProps {
@@ -52,18 +56,32 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
 
   // Charity percentage slider state
   const [sliderPercentage, setSliderPercentage] = useState<number>(currentUser.charityPercentage || 10);
+  const [inspectingVerification, setInspectingVerification] = useState<WinnerVerification | null>(null);
+
+  const tangibleImpact = selectedCharity
+    ? ImpactCalculator.getTangibleImpact(selectedCharity.category, (19.99 * sliderPercentage) / 100)
+    : null;
+
+  const avgScore = userScores.length
+    ? (userScores.reduce((sum, s) => sum + s.score, 0) / userScores.length).toFixed(1)
+    : '0.0';
+  const bestScore = userScores.length ? Math.max(...userScores.map(s => s.score)) : 0;
+  const lowestScore = userScores.length ? Math.min(...userScores.map(s => s.score)) : 0;
 
   const handleOpenAddScore = () => {
+    sounds.playClick();
     setEditingScore(null);
     setIsScoreModalOpen(true);
   };
 
   const handleOpenEditScore = (score: GolfScore) => {
+    sounds.playClick();
     setEditingScore(score);
     setIsScoreModalOpen(true);
   };
 
   const handleCommitSliderPercentage = () => {
+    sounds.playBallReveal(3);
     if (selectedCharity) {
       updateCharityPreference(selectedCharity.id, sliderPercentage);
     }
@@ -159,6 +177,26 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
               <Plus className="w-4 h-4" />
               <span>Log New Round</span>
             </button>
+          </div>
+
+          {/* Performance Analytics Telemetry Bar */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 rounded-2xl bg-black/40 border border-white/5 text-center">
+            <div>
+              <span className="text-[10px] text-slate-400 block uppercase">Average Points</span>
+              <span className="text-base font-bold font-mono text-emerald-400">{avgScore}</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-slate-400 block uppercase">Best Round</span>
+              <span className="text-base font-bold font-mono text-amber-400">{bestScore} pts</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-slate-400 block uppercase">Low Round</span>
+              <span className="text-base font-bold font-mono text-slate-300">{lowestScore} pts</span>
+            </div>
+            <div>
+              <span className="text-[10px] text-slate-400 block uppercase">Rolling Buffer</span>
+              <span className="text-base font-bold font-mono text-teal-400">{userScores.length}/5 Active</span>
+            </div>
           </div>
 
           {/* 5-Score Rolling Slot Cards View */}
@@ -366,6 +404,24 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
                 </div>
               </div>
 
+              {/* Real-World Tangible Impact Card (§ 08) */}
+              {tangibleImpact && (
+                <div className="mt-3 p-3.5 rounded-2xl bg-emerald-950/40 border border-emerald-500/30 text-xs animate-in fade-in duration-300">
+                  <div className="flex items-center gap-1.5 text-emerald-300 font-bold uppercase tracking-wider text-[10px] mb-1">
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> Tangible Humanitarian Outcome
+                  </div>
+                  <div className="text-white font-semibold">
+                    {tangibleImpact.metricNumber} {tangibleImpact.metricUnit}
+                  </div>
+                  <div className="text-[11px] text-slate-400 mt-0.5">
+                    {tangibleImpact.secondaryOutcome}
+                  </div>
+                  <div className="text-[10px] text-emerald-400/80 font-mono mt-1 pt-1 border-t border-emerald-500/20">
+                    {tangibleImpact.equivalentRounds}
+                  </div>
+                </div>
+              )}
+
               {sliderPercentage !== currentUser.charityPercentage && (
                 <button
                   onClick={handleCommitSliderPercentage}
@@ -503,12 +559,20 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
                   </div>
 
                   {/* Proof Upload Trigger if missing or rejected */}
-                  {(!v.proofUrl || v.status === 'rejected') && (
+                  {(!v.proofUrl || v.status === 'rejected') ? (
                     <button
                       onClick={() => setActiveProofVerification(v)}
                       className="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all"
                     >
                       Upload Scorecard Proof To Claim
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setInspectingVerification(v)}
+                      className="w-full py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-emerald-500/30 font-semibold text-xs flex items-center justify-center gap-1.5 transition-all"
+                    >
+                      <Scan className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Inspect with AI Scorecard Vision Scanner</span>
                     </button>
                   )}
                 </div>
@@ -536,6 +600,15 @@ export const UserDashboardView: React.FC<UserDashboardViewProps> = ({
           isOpen={Boolean(activeProofVerification)}
           onClose={() => setActiveProofVerification(null)}
           verification={activeProofVerification}
+        />
+      )}
+
+      {/* AI Scorecard Scanner Modal (§ 09) */}
+      {inspectingVerification && (
+        <ScorecardScannerModal
+          isOpen={Boolean(inspectingVerification)}
+          onClose={() => setInspectingVerification(null)}
+          verification={inspectingVerification}
         />
       )}
     </div>

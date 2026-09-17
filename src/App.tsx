@@ -8,6 +8,8 @@ import { PricingSection } from './components/PricingSection';
 import { UserDashboardView } from './components/UserDashboardView';
 import { AdminDashboardView } from './components/AdminDashboardView';
 import { SubscribeModal } from './components/SubscribeModal';
+import { SystemDesignModal } from './components/SystemDesignModal';
+import { EvaluatorTour } from './components/EvaluatorTour';
 import { Footer } from './components/Footer';
 import { SubscriptionPlan } from './types';
 
@@ -15,6 +17,7 @@ const MainAppContent: React.FC = () => {
   const { currentRole, setCurrentRole } = useApp();
   const [activeTab, setActiveTab] = useState<string>('home');
   const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState<boolean>(false);
+  const [isSystemDesignOpen, setIsSystemDesignOpen] = useState<boolean>(false);
   const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<SubscriptionPlan>('monthly');
 
   const handleOpenSubscribe = (plan: SubscriptionPlan = 'monthly') => {
@@ -30,6 +33,7 @@ const MainAppContent: React.FC = () => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           openSubscribeModal={() => handleOpenSubscribe('monthly')}
+          openSystemDesignModal={() => setIsSystemDesignOpen(true)}
         />
 
         {/* Main Routed Content */}
@@ -78,6 +82,15 @@ const MainAppContent: React.FC = () => {
         onClose={() => setIsSubscribeModalOpen(false)}
         initialPlan={selectedPlanForCheckout}
       />
+
+      {/* System Architecture & Spec Modal */}
+      <SystemDesignModal
+        isOpen={isSystemDesignOpen}
+        onClose={() => setIsSystemDesignOpen(false)}
+      />
+
+      {/* Floating Evaluator Tour Guide (§ 16.1 Testing Checklist Companion) */}
+      <EvaluatorTour onNavigateTab={(tab) => setActiveTab(tab)} />
 
       {/* Global Footer */}
       <Footer />

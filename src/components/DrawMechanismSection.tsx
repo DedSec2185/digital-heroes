@@ -12,6 +12,7 @@ import {
   Layers,
   ArrowRight
 } from 'lucide-react';
+import { sounds } from '../lib/audioEffects';
 import confetti from 'canvas-confetti';
 
 export const DrawMechanismSection: React.FC = () => {
@@ -20,24 +21,34 @@ export const DrawMechanismSection: React.FC = () => {
   // Interactive Live Simulator for visitors/subscribers to test their luck
   const [customNumbers, setCustomNumbers] = useState<number[]>([38, 34, 41, 29, 36]);
   const [testDrawnNumbers, setTestDrawnNumbers] = useState<number[]>([38, 34, 41, 15, 22]);
+  const [isRevealing, setIsRevealing] = useState<boolean>(false);
   const [simulatedMatch, setSimulatedMatch] = useState<{ matchedCount: number; matchedNumbers: number[] } | null>({
     matchedCount: 3,
     matchedNumbers: [38, 34, 41]
   });
 
   const handleRunTestDraw = () => {
+    setIsRevealing(true);
+    sounds.playBallTumble();
     const fresh = DrawEngine.generateRandomNumbers();
     setTestDrawnNumbers(fresh);
-    const match = DrawEngine.calculateMatches(customNumbers, fresh);
-    setSimulatedMatch(match);
 
-    if (match.matchedCount >= 3) {
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.7 }
-      });
-    }
+    setTimeout(() => {
+      setIsRevealing(false);
+      const match = DrawEngine.calculateMatches(customNumbers, fresh);
+      setSimulatedMatch(match);
+
+      if (match.matchedCount >= 3) {
+        sounds.playJackpotFanfare();
+        confetti({
+          particleCount: 70,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      } else {
+        sounds.playBallReveal(0);
+      }
+    }, 400);
   };
 
   const handleNumberInput = (idx: number, val: string) => {
